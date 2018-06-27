@@ -48,3 +48,26 @@ class Group(models.Model):
         A function which generates a unique url for each group
         '''
         return reverse('groups:single', kwargs={'slug': self.slug})
+
+    @classmethod
+    def search_by_name(cls, search_term):
+        name = cls.objects.filter(name__icontains=search_term)
+        return name
+
+    class Meta:
+        ordering = ['name']
+
+
+class GroupMember(models.Model):
+    '''
+    This will initialize a group member  class
+    which is instiantiated whenever a group member object is created
+    '''
+    group = models.ForeignKey(Group, related_name='memberships')
+    user = models.ForeignKey(User, related_name='user_groups')
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        unique_together = ('group', 'user')
