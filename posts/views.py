@@ -44,3 +44,19 @@ class PostDetail(SelectRelatedMixin, generic.DetailView):
         return queryset.filter(
             user__username__iexact=self.kwargs.get("username")
         )
+
+class CreatePost(LoginRequiredMixin, SelectRelatedMixin, generic.CreateView):
+    # form_class = forms.PostForm
+    fields = ('business_name', 'group')
+    model = models.Post
+
+    # def get_form_kwargs(self):
+    #     kwargs = super().get_form_kwargs()
+    #     kwargs.update({"user": self.request.user})
+    #     return kwargs
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+        return super().form_valid(form)
