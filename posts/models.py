@@ -23,3 +23,19 @@ class Post(models.Model):
         in the admin panel
         '''
         return self.message
+
+    def save(self, *args, **kwargs):
+        '''
+        this save each post object for each user
+        '''
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        '''
+        This will generate a unique url for each group mem
+        '''
+        return reverse('posts:single', kwargs={'username': self.user.username, 'pk': self.pk})
+
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ['user', 'business_name']
