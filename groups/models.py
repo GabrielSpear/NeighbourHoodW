@@ -21,3 +21,17 @@ class Group(models.Model):
     location = models.TextField(default='', blank=True)
     location_html = models.TextField(editable=False, default='', blank=True)
     members = models.ManyToManyField(User, through='GroupMember')
+
+    def __str__(self):
+        '''
+        This is a string representation
+        of the group object
+        '''
+        return self.name
+
+    def save(self, *args, **kwargs):
+        '''
+        A function to save each group object
+        '''
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
