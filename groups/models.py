@@ -35,3 +35,16 @@ class Group(models.Model):
         '''
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+    def delete_Group(self, *args, **kwargs):
+        '''
+        A function to delete each group object
+        '''
+        self .slug = slugify(self.name)
+        super().delete(*args, **kwargs)
+
+    def get_absolute_url(self):
+        '''
+        A function which generates a unique url for each group
+        '''
+        return reverse('groups:single', kwargs={'slug': self.slug})
