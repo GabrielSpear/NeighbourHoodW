@@ -80,3 +80,14 @@ class LeaveGroup(LoginRequiredMixin, generic.RedirectView):
                 "You have successfully left this group."
             )
         return super().get(request, *args, **kwargs)
+
+def search(request):
+    if 'hood_name' in request.GET and request.GET["hood_name"]:
+        search_term = request.GET.get("hood_name")
+        searched_hoods = Group.search_by_name(search_term)
+        message = f"{search_term}"
+        return render(request, 'group_search.html', {"hoods": searched_hoods})
+
+    else:
+        message = "You haven't searched for any term"
+    return render(request, 'group_search.html')
